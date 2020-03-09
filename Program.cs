@@ -18,6 +18,9 @@ namespace KamopisScreensaver
                 // 二重起動を禁止する
                 if (!mutex.WaitOne(0, false)) return;
 
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+
                 /// <see cref="http://www7b.biglobe.ne.jp/~whitetiger/cs/cs2010001.html"/>
                 if (args.Length > 0)
                 {
@@ -29,9 +32,7 @@ namespace KamopisScreensaver
                     else if (args[0].ToLower().Trim().Substring(0, 2) == "/p")
                     {
                         // プレビュー画面を表示
-                        Application.EnableVisualStyles();
-                        Application.SetCompatibleTextRenderingDefault(false);
-                        //args[1] はプレビューウィンドウのハンドル(HWND)
+                        // args[1] はプレビューウィンドウのハンドル(HWND)
                         Application.Run(new ScreenForm(new IntPtr(long.Parse(args[1]))));
                     }
                     else if (args[0].ToLower().Trim().Substring(0, 2) == "/c")
@@ -51,12 +52,8 @@ namespace KamopisScreensaver
         // スクリーンセーバーを表示
         static void ShowScreenSaver()
         {
-            //Application.SetHighDpiMode(HighDpiMode.SystemAware);
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-
             // コンピューター上のすべてのスクリーン(モニター)をループ
-            foreach (Screen screen in Screen.AllScreens)
+            foreach (var screen in Screen.AllScreens)
             {
                 var screensaver = new ScreenForm(screen.Bounds);
                 screensaver.Show();
