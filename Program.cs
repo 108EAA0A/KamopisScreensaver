@@ -43,7 +43,6 @@ namespace KamopisScreensaver
                     else if (option == "/c")
                     {
                         // スクリーンセーバーのオプション表示
-                        Application.Run(new ConfigForm());
                     }
                 }
                 else
@@ -51,7 +50,6 @@ namespace KamopisScreensaver
                     // 引数なしの場合
                     // 渡される引数がない場合、これはユーザーがファイルを右クリックして
                     //「構成」を選んだときに発生します。通常はオプションフォームを表示します。
-                    Application.Run(new ConfigForm());
                 }
             }
         }
