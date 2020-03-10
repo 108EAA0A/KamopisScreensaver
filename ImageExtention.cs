@@ -3,9 +3,9 @@ using System.Drawing.Drawing2D;
 
 namespace KamopisScreensaver
 {
-    static class BitmapExtention
+    static class ImageExtention
     {
-        public static Bitmap Resized(this Bitmap image, double dw, double dh)
+        public static Image Resized(this Image image, double dw, double dh)
         {
             double hi;
             double imagew = image.Width;
@@ -28,6 +28,6 @@ namespace KamopisScreensaver
             return result;
         }
 
-        public static Bitmap Resized(this Bitmap image, SizeF size) => Resized(image, size.Width, size.Height);
+        public static Image Resized(this Image image, SizeF size) => Resized(image, size.Width, size.Height);
     }
 }
