@@ -3,6 +3,10 @@ using System.Runtime.InteropServices;
 
 namespace KamopisScreensaver
 {
+    /// <summary>
+    /// Win32API Wrapper
+    /// </summary>
+    /// <see cref="http://pinvoke.net/"/>
     public static class PInvoke
     {
         [DllImport("user32.dll", SetLastError = true)]

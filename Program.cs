@@ -12,8 +12,7 @@ namespace KamopisScreensaver
         [STAThread]
         static void Main(string[] args)
         {
-            // ミューテックス生成
-            using (Mutex mutex = new Mutex(false, Application.ProductName))
+            using (var mutex = new Mutex(false, Application.ProductName))
             {
                 // 二重起動を禁止する
                 if (!mutex.WaitOne(0, false)) return;
@@ -24,20 +23,27 @@ namespace KamopisScreensaver
                 /// <see cref="http://www7b.biglobe.ne.jp/~whitetiger/cs/cs2010001.html"/>
                 if (args.Length > 0)
                 {
-                    if (args[0].ToLower().Trim().Substring(0, 2) == "/s")
+                    var option = args[0].ToLower().Trim().Substring(0, 2);
+                    if (option == "/s")
                     {
                         // スクリーンセーバーを実行
-                        ShowScreenSaver();
+                        foreach (var screen in Screen.AllScreens)
+                        {
+                            var screensaver = new ScreenForm(screen.Bounds);
+                            screensaver.Show();
+                        }
+                        Application.Run();
                     }
-                    else if (args[0].ToLower().Trim().Substring(0, 2) == "/p")
+                    else if (option == "/p")
                     {
                         // プレビュー画面を表示
                         // args[1] はプレビューウィンドウのハンドル(HWND)
                         Application.Run(new ScreenForm(new IntPtr(long.Parse(args[1]))));
                     }
-                    else if (args[0].ToLower().Trim().Substring(0, 2) == "/c")
+                    else if (option == "/c")
                     {
                         // スクリーンセーバーのオプション表示
+                        Application.Run(new ConfigForm());
                     }
                 }
                 else
@@ -45,21 +51,9 @@ namespace KamopisScreensaver
                     // 引数なしの場合
                     // 渡される引数がない場合、これはユーザーがファイルを右クリックして
                     //「構成」を選んだときに発生します。通常はオプションフォームを表示します。
+                    Application.Run(new ConfigForm());
                 }
             }
-        }
-
-        // スクリーンセーバーを表示
-        static void ShowScreenSaver()
-        {
-            // コンピューター上のすべてのスクリーン(モニター)をループ
-            foreach (var screen in Screen.AllScreens)
-            {
-                var screensaver = new ScreenForm(screen.Bounds);
-                screensaver.Show();
-            }
-
-            Application.Run();
         }
     }
 }

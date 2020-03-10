@@ -12,27 +12,31 @@ namespace KamopisScreensaver
     /// <see cref="http://www7b.biglobe.ne.jp/~whitetiger/cs/cs2010001.html"/>
     public partial class ScreenForm : Form
     {
-        readonly bool IsPreviewMode;
+        private readonly bool IsPreviewMode;
 
         #region Constructors
 
-        // このコンストラクタは、フォームを全画面で表示する
-        // ノーマルモードで使用される (/s)
-        public ScreenForm(Rectangle Bounds)
+        private ScreenForm()
         {
             InitializeComponent();
-            this.IsPreviewMode = false;
-
-            this.TransparencyKey = this.BackColor;
-            this.Bounds = Bounds;
+            this.TransparencyKey = this.BackColor; // TODO: 透過処理が重そうなので変える
+            this.timerUpdate.Interval = 33;        // TODO: 60FPS固定なので可変にする
+            this.timerUpdate.Start();
             Cursor.Hide();
+        }
+
+        // このコンストラクタは、フォームを全画面で表示する
+        // ノーマルモードで使用される (/s)
+        public ScreenForm(Rectangle Bounds) : this()
+        {
+            this.IsPreviewMode = false;
+            this.Bounds = Bounds; // Boundsに代入するとSizeも変わる
         }
 
         // このコンストラクタは、スクリーンセーバーの選択ダイアログボックスの小窓で使用される
         // プレビューモードで使用される (/p)
-        public ScreenForm(IntPtr PreviewHandle)
+        public ScreenForm(IntPtr PreviewHandle) : this()
         {
-            InitializeComponent();
             this.IsPreviewMode = true;
 
             // このウィンドウの親ウィンドウを設定する
@@ -43,11 +47,11 @@ namespace KamopisScreensaver
             var dwNewLong = new IntPtr((uint)PInvoke.GetWindowLongPtr(this.Handle, -16) | (uint)PInvoke.WindowStyles.WS_CHILD);
             PInvoke.SetWindowLongPtr(new HandleRef(this, this.Handle), -16, dwNewLong);
 
-            // 親ウィンドウのサイズに設定する
+            // 親ウィンドウのサイズと同じにする
             PInvoke.GetClientRect(PreviewHandle, out var ParentRect);
             this.Size = ParentRect.Size;
 
-            // ロケーションを設定
+            // ウィンドウの位置を左上隅に
             this.Location = Point.Empty;
 
             // プレビューでわかりやすくする
@@ -57,31 +61,27 @@ namespace KamopisScreensaver
 
         private void ScreenForm_Load(object sender, EventArgs e)
         {
-            Initalize();
+            KamopisInitalize(Math.Min(this.Size.Width, this.Size.Height) / 6);
         }
 
-        private void Initalize()
+        private void KamopisInitalize(int KamopisBaseSize, int n = 20)
         {
-            this.timerUpdate.Interval = 33;
-            this.timerUpdate.Start();
-
             var rand = new Random();
 
-            Kamopises.Capacity = 50;
+            Kamopises.Capacity = n;
             for (int i = 0; i < Kamopises.Capacity; i++)
             {
-                var x = this.ClientSize.Width * rand.NextDouble();
+                var x = this.ClientSize.Width  * rand.NextDouble();
                 var y = this.ClientSize.Height * rand.NextDouble();
-                var vx = 30 * (rand.NextDouble() - 0.5);
-                var vy = 30 * (rand.NextDouble() - 0.5);
-                var s = KAMOPIS_SIZE * (rand.NextDouble() + 0.5);
+                var vx = KamopisBaseSize / 10 * (rand.NextDouble() - 0.5);
+                var vy = KamopisBaseSize / 10 * (rand.NextDouble() - 0.5);
+                var s = KamopisBaseSize * (rand.NextDouble() + 0.5);
                 this.Kamopises.Add(new Kamopis(x, y, vx, vy, s, s));
             }
         }
 
-        private const int KAMOPIS_SIZE = 200;
 
-        private List<Kamopis> Kamopises = new List<Kamopis>();
+        private readonly List<Kamopis> Kamopises = new List<Kamopis>();
 
         private void timerUpdate_Tick(object sender, EventArgs e)
         {
