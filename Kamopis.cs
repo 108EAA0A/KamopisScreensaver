@@ -5,7 +5,7 @@ namespace KamopisScreensaver
 {
     public class Kamopis
     {
-        private readonly Bitmap Image;
+        private readonly Image Image;
         public PointF Pos;
         public Vector Speed;
         public SizeF Size => this.Image.Size;
@@ -19,7 +19,7 @@ namespace KamopisScreensaver
             this.Pos.Y = (float)y;
             this.Speed.X = vx;
             this.Speed.Y = vy;
-            this.Image = Resource.KAMOPIS.ResizeImage(w, h);
+            this.Image = Resource.KAMOPIS.Resized(w, h);
         }
 
         public Kamopis(PointF pos, Vector speed, SizeF size) : this(pos.X, pos.Y, speed.X, speed.Y, size.Width, size.Height) { }

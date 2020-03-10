@@ -5,7 +5,7 @@ namespace KamopisScreensaver
 {
     static class BitmapExtention
     {
-        public static Bitmap ResizeImage(this Bitmap image, double dw, double dh)
+        public static Bitmap Resized(this Bitmap image, double dw, double dh)
         {
             double hi;
             double imagew = image.Width;
@@ -28,6 +28,6 @@ namespace KamopisScreensaver
             return result;
         }
 
-        public static Bitmap ResizeImage(this Bitmap image, SizeF size) => ResizeImage(image, size.Width, size.Height);
+        public static Bitmap Resized(this Bitmap image, SizeF size) => Resized(image, size.Width, size.Height);
     }
 }

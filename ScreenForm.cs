@@ -19,7 +19,6 @@ namespace KamopisScreensaver
         private ScreenForm()
         {
             InitializeComponent();
-            this.TransparencyKey = this.BackColor; // TODO: 透過処理が重そうなので変える
             this.timerUpdate.Interval = 33;        // TODO: 60FPS固定なので可変にする
             this.timerUpdate.Start();
             Cursor.Hide();
@@ -77,9 +76,19 @@ namespace KamopisScreensaver
                 var vy = KamopisBaseSize / 10 * (rand.NextDouble() - 0.5);
                 var s = KamopisBaseSize * (rand.NextDouble() + 0.5);
                 this.Kamopises.Add(new Kamopis(x, y, vx, vy, s, s));
+
+        private static Image GetScreenCaptureImage()
+        {
+            var bmp = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                // 画面全体をコピーする
+                g.CopyFromScreen(Point.Empty, Point.Empty, bmp.Size);
             }
+            return bmp;
         }
 
+        private readonly Image CapturedScreenImage = GetScreenCaptureImage();
 
         private readonly List<Kamopis> Kamopises = new List<Kamopis>();
 
@@ -96,6 +105,8 @@ namespace KamopisScreensaver
 
         private void ScreenForm_Paint(object sender, PaintEventArgs e)
         {
+            e.Graphics.DrawImage(this.CapturedScreenImage, Point.Empty);
+
             foreach (var kamopis in Kamopises)
             {
                 kamopis.Draw(e.Graphics);
