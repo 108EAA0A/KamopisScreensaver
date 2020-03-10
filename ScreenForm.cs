@@ -73,6 +73,8 @@ namespace KamopisScreensaver
                 var vy = KamopisBaseSize / 10 * (rand.NextDouble() - 0.5) + 5;
                 var s = KamopisBaseSize * (1 + (rand.NextDouble() * KAMOPIS_SIZE_RANGE - KAMOPIS_SIZE_RANGE / 2));
                 this.Kamopises.Add(new Kamopis(x, y, vx, vy, s, s));
+            }
+        }
 
         private static Image GetScreenCaptureImage()
         {
