@@ -52,9 +52,6 @@ namespace KamopisScreensaver
 
             // ウィンドウの位置を左上隅に
             this.Location = Point.Empty;
-
-            // プレビューでわかりやすくする
-            this.FormBorderStyle = FormBorderStyle.Sizable;
         }
         #endregion
 
