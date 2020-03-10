@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -96,6 +97,7 @@ namespace KamopisScreensaver
         private const double KAMOPIS_SIZE_RANGE = 0.5;
         private readonly List<Kamopis> Kamopises = new List<Kamopis>();
 
+        [SuppressMessage("Style", "IDE1006:命名スタイル", Justification = "<保留中>")]
         private void timerUpdate_Tick(object sender, EventArgs e)
         {
             foreach (var kamopis in Kamopises)
