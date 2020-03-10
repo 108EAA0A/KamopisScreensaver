@@ -57,7 +57,7 @@ namespace KamopisScreensaver
 
         private void ScreenForm_Load(object sender, EventArgs e)
         {
-            KamopisInitalize(Math.Min(this.Size.Width, this.Size.Height) / 6);
+            KamopisInitalize(Math.Min(this.Size.Width, this.Size.Height) / 5);
         }
 
         private void KamopisInitalize(int KamopisBaseSize, int n = 20)
@@ -69,9 +69,9 @@ namespace KamopisScreensaver
             {
                 var x = this.ClientSize.Width  * rand.NextDouble();
                 var y = this.ClientSize.Height * rand.NextDouble();
-                var vx = KamopisBaseSize / 10 * (rand.NextDouble() - 0.5);
-                var vy = KamopisBaseSize / 10 * (rand.NextDouble() - 0.5);
-                var s = KamopisBaseSize * (rand.NextDouble() + 0.5);
+                var vx = KamopisBaseSize / 10 * (rand.NextDouble() - 0.5) + 5;
+                var vy = KamopisBaseSize / 10 * (rand.NextDouble() - 0.5) + 5;
+                var s = KamopisBaseSize * (1 + (rand.NextDouble() * KAMOPIS_SIZE_RANGE - KAMOPIS_SIZE_RANGE / 2));
                 this.Kamopises.Add(new Kamopis(x, y, vx, vy, s, s));
 
         private static Image GetScreenCaptureImage()
@@ -87,6 +87,7 @@ namespace KamopisScreensaver
 
         private readonly Image CapturedScreenImage = GetScreenCaptureImage();
 
+        private const double KAMOPIS_SIZE_RANGE = 0.5;
         private readonly List<Kamopis> Kamopises = new List<Kamopis>();
 
         private void timerUpdate_Tick(object sender, EventArgs e)
