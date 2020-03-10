@@ -58,10 +58,11 @@ namespace KamopisScreensaver
 
         public void Draw(Graphics g)
         {
-            // 枠線を表示する(デバッグ用)
+            // 四角い枠線を表示する(デバッグ用)
             //g.DrawRectangle(new Pen(Color.Black), this.Rect);
 
             g.DrawImage(this.Image, GetRotatedPointFs(this.Theta));
+            g.DrawEllipse(new Pen(Color.Black), this.RectF);
         }
 
         /// <summary>
