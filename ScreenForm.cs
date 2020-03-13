@@ -44,8 +44,8 @@ namespace KamopisScreensaver
 
             // この子ウィンドウを作成する
             // スクリーンセーバーの設定ダイアログボックスが閉じられると終了する
-            var dwNewLong = new IntPtr((uint)PInvoke.GetWindowLongPtr(this.Handle, -16) | (uint)PInvoke.WindowStyles.WS_CHILD);
-            PInvoke.SetWindowLongPtr(new HandleRef(this, this.Handle), -16, dwNewLong);
+            var dwNewLong = new IntPtr((uint)PInvoke.GetWindowLongPtr(this.Handle, PInvoke.WindowLongFlags.GWL_STYLE) | (uint)PInvoke.WindowStyles.WS_CHILD);
+            PInvoke.SetWindowLongPtr(new HandleRef(this, this.Handle), PInvoke.WindowLongFlags.GWL_STYLE, dwNewLong);
 
             // 親ウィンドウのサイズと同じにする
             PInvoke.GetClientRect(PreviewHandle, out var ParentRect);

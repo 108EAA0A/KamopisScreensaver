@@ -15,22 +15,66 @@ namespace KamopisScreensaver
         // This helper static method is required because the 32-bit version of user32.dll does not contain this API
         // (on any versions of Windows), so linking the method will fail at run-time. The bridge dispatches the request
         // to the correct function (GetWindowLong in 32-bit mode and GetWindowLongPtr in 64-bit mode)
-        public static IntPtr SetWindowLongPtr(HandleRef hWnd, int nIndex, IntPtr dwNewLong) =>
+        public static IntPtr SetWindowLongPtr(HandleRef hWnd, WindowLongFlags nIndex, IntPtr dwNewLong) =>
             IntPtr.Size == 8
             ? SetWindowLongPtr64(hWnd, nIndex, dwNewLong)
             : new IntPtr(SetWindowLong32(hWnd, nIndex, dwNewLong.ToInt32()));
 
         [DllImport("user32.dll", EntryPoint = "SetWindowLong")]
-        public static extern int SetWindowLong32(HandleRef hWnd, int nIndex, int dwNewLong);
+        public static extern int SetWindowLong32(HandleRef hWnd, WindowLongFlags nIndex, int dwNewLong);
 
         [DllImport("user32.dll", EntryPoint = "SetWindowLongPtr")]
-        public static extern IntPtr SetWindowLongPtr64(HandleRef hWnd, int nIndex, IntPtr dwNewLong);
+        public static extern IntPtr SetWindowLongPtr64(HandleRef hWnd, WindowLongFlags nIndex, IntPtr dwNewLong);
 
         [DllImport("user32.dll", EntryPoint = "GetWindowLong")]
-        public static extern IntPtr GetWindowLongPtr(IntPtr hWnd, int nIndex);
+        public static extern IntPtr GetWindowLongPtr(IntPtr hWnd, WindowLongFlags nIndex);
 
         [DllImport("user32.dll")]
         public static extern bool GetClientRect(IntPtr hWnd, out RECT lpRect);
+
+        /// <summary>
+        /// GetWindowLongPtr/SetWindowLongPtr で何の情報を取得/設定するのかを指定します
+        /// DWLP_ は hWnd パラメータがダイアログボックスのハンドルである場合のみ使用可能
+        /// </summary>
+        /// <see cref="http://chokuto.ifdef.jp/urawaza/api/GetWindowLong.html"/>
+        public enum WindowLongFlags : int
+        {
+            /// <summary>
+            /// ウィンドウプロシージャのアドレス
+            /// 直接ウィンドウプロシージャを呼び出すには CallWindowProc 関数を使う
+            /// </summary>
+            GWL_WNDPROC = -4,
+
+            /// <summary>アプリケーションのインスタンスハンドル</summary>
+            GWLP_HINSTANCE = -6,
+
+            /// <summary>親ウィンドウのハンドル</summary>
+            GWLP_HWNDPARENT = -8,
+
+            /// <summary>ウィンドウ ID</summary>
+            GWL_ID = -12,
+
+            /// <summary>ウィンドウスタイル</summary>
+            GWL_STYLE = -16,
+
+            /// <summary>拡張ウィンドウスタイル</summary>
+            GWL_EXSTYLE = -20,
+
+            /// <summary>ウィンドウに関連付けられたアプリケーション定義の32ビット値</summary>
+            GWL_USERDATA = -21,
+
+            /// <summary>ダイアログボックスプロシージャで処理されたメッセージの戻り値</summary>
+            DWLP_MSGRESULT = 0x0,
+
+            /// <summary>
+            /// ダイアログボックスプロシージャのアドレス
+            /// 直接ダイアログボックスプロシージャを呼び出すには CallWindowProc 関数を使う
+            /// </summary>
+            DWLP_DLGPROC = 0x4,
+
+            /// <summary>アプリケーション定義の情報（ハンドルやポインタなど）</summary>
+            DWLP_USER = 0x8,
+        }
 
         /// <summary>
         /// Window Styles.
