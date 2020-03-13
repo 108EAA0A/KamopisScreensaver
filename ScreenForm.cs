@@ -20,9 +20,6 @@ namespace KamopisScreensaver
         private ScreenForm()
         {
             InitializeComponent();
-            this.timerUpdate.Interval = 33;        // TODO: 60FPS固定なので可変にする
-            this.timerUpdate.Start();
-            Cursor.Hide();
         }
 
         // このコンストラクタは、フォームを全画面で表示する
@@ -61,7 +58,13 @@ namespace KamopisScreensaver
 
         private void ScreenForm_Load(object sender, EventArgs e)
         {
-            KamopisInitalize(Math.Min(this.Size.Width, this.Size.Height) / 5, KAMOPIS_NUM);
+            KamopisInitalize(Math.Min(this.ClientSize.Width, this.ClientSize.Height) / 5, KAMOPIS_NUM);
+
+            // TODO: 60FPS固定なので可変にする
+            this.timerUpdate.Interval = 33;
+            this.timerUpdate.Start();
+
+            Cursor.Hide();
         }
 
         private void KamopisInitalize(int KamopisBaseSize, int n)
@@ -104,7 +107,7 @@ namespace KamopisScreensaver
         [SuppressMessage("Style", "IDE1006:命名スタイル", Justification = "<保留中>")]
         private void timerUpdate_Tick(object sender, EventArgs e)
         {
-            foreach (var kamopis in Kamopises)
+            foreach (var kamopis in this.Kamopises)
             {
                 kamopis.Update(this.ClientSize);
             }
@@ -117,7 +120,7 @@ namespace KamopisScreensaver
         {
             e.Graphics.DrawImage(this.CapturedScreenImage, 0, 0, this.ClientSize.Width, this.ClientSize.Height);
 
-            foreach (var kamopis in Kamopises)
+            foreach (var kamopis in this.Kamopises)
             {
                 kamopis.Draw(e.Graphics);
             }
