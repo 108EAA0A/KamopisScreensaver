@@ -53,6 +53,9 @@ namespace KamopisScreensaver
 
             // ウィンドウの位置を左上隅に
             this.Location = Point.Empty;
+
+            // 予めプレビューウィンドウに合わせて縮小しておく
+            this.CapturedScreenImage = CapturedScreenImage.Resized(this.ClientSize);
         }
         #endregion
 
@@ -112,7 +115,7 @@ namespace KamopisScreensaver
 
         private void ScreenForm_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.DrawImage(this.CapturedScreenImage, Point.Empty);
+            e.Graphics.DrawImage(this.CapturedScreenImage, 0, 0, this.ClientSize.Width, this.ClientSize.Height);
 
             foreach (var kamopis in Kamopises)
             {
