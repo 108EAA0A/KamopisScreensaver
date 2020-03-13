@@ -78,6 +78,7 @@
     </EmbeddedResource>
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
+    <None Include="installer.wxs" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -95,5 +96,23 @@
     <Content Include="KAMOPIS.ico" />
     <Content Include="KAMOPIS.png" />
   </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 および x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy /Y $(TargetFileName) $(TargetName).scr
+candle -nologo $(ProjectDir)installer.wxs -out $(ProjectDir)obj\$(ConfigurationName)\installer.wixobj -ext WixUIExtension
+light -nologo -cultures:ja-jp $(ProjectDir)obj\$(ConfigurationName)\installer.wixobj -out $(TargetDir)installer.msi -ext WixUIExtension
+del /q $(TargetDir)installer.wixpdb</PostBuildEvent>
+  </PropertyGroup>
 </Project>
