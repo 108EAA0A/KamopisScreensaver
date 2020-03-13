@@ -23,7 +23,8 @@ namespace KamopisScreensaver
                 /// <see cref="http://www7b.biglobe.ne.jp/~whitetiger/cs/cs2010001.html"/>
                 if (args.Length > 0)
                 {
-                    var option = args[0].ToLower().Trim().Substring(0, 2);
+                    var (option, secondArgument) = ParseArgs(args);
+
                     if (option == "/s")
                     {
                         // スクリーンセーバーを実行
@@ -38,7 +39,7 @@ namespace KamopisScreensaver
                     {
                         // プレビュー画面を表示
                         // args[1] はプレビューウィンドウのハンドル(HWND)
-                        Application.Run(new ScreenForm(new IntPtr(long.Parse(args[1]))));
+                        Application.Run(new ScreenForm(new IntPtr(long.Parse(secondArgument))));
                     }
                     else if (option == "/c")
                     {
@@ -52,6 +53,26 @@ namespace KamopisScreensaver
                     //「構成」を選んだときに発生します。通常はオプションフォームを表示します。
                 }
             }
+        }
+
+        /// <summary>Handle cases where arguments are separated by colon.</summary>
+        /// <example>/c:1234567 or /P:1234567</example>
+        /// <see cref="https://sites.harding.edu/fmccown/screensaver/screensaver.html"/>
+        private static (string, string) ParseArgs(string[] args)
+        {
+            if (args.Length == 0) return (null, null);
+
+            string firstArgument = args[0].ToLower().Trim();
+            string secondArgument = null;
+
+            if (firstArgument.Length > 2)
+            {
+                secondArgument = firstArgument.Substring(3).Trim();
+                firstArgument = firstArgument.Substring(0, 2);
+            }
+            else if (args.Length > 1) secondArgument = args[1];
+
+            return (firstArgument, secondArgument);
         }
     }
 }
