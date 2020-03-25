@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>KAMOPIS.ico</ApplicationIcon>
+    <Win32Resource>NativeResource.res</Win32Resource>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -95,6 +95,7 @@
   <ItemGroup>
     <Content Include="KAMOPIS.ico" />
     <Content Include="KAMOPIS.png" />
+    <Content Include="NativeResource.res" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
