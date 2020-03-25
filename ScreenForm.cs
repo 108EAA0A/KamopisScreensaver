@@ -75,11 +75,11 @@ namespace KamopisScreensaver
             {
                 var x = this.ClientSize.Width  * rand.NextDouble();
                 var y = this.ClientSize.Height * rand.NextDouble();
-                var vx = KamopisBaseSize / 10 * (rand.NextDouble() - 0.5) + 5;
-                var vy = KamopisBaseSize / 10 * (rand.NextDouble() - 0.5) + 5;
+                var vx = FRAME_RATE / 10 * KamopisBaseSize / 10 * (rand.NextDouble() - 0.5) + 5;
+                var vy = FRAME_RATE / 10 * KamopisBaseSize / 10 * (rand.NextDouble() - 0.5) + 5;
 
                 var t = 360 * rand.NextDouble();
-                var vt = 20 * (rand.NextDouble() - 0.5);
+                var vt = FRAME_RATE * (rand.NextDouble() - 0.5);
 
                 var s = KamopisBaseSize * (1 + (rand.NextDouble() * KAMOPIS_SIZE_RANGE - KAMOPIS_SIZE_RANGE / 2));
                 this.Kamopises.Add(new Kamopis((float)x, (float)y, (float)vx, (float)vy, (float)t, (float)vt, (float)s, (float)s));
