@@ -30,7 +30,7 @@ namespace KamopisScreensaver
                         // スクリーンセーバーを実行
                         foreach (var screen in Screen.AllScreens)
                         {
-                            var screensaver = new ScreenForm(screen.Bounds);
+                            var screensaver = new ScreenForm(screen);
                             screensaver.Show();
                         }
                         Application.Run();

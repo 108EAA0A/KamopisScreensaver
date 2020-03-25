@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -24,10 +25,11 @@ namespace KamopisScreensaver
 
         // このコンストラクタは、フォームを全画面で表示する
         // ノーマルモードで使用される (/s)
-        public ScreenForm(Rectangle Bounds) : this()
+        public ScreenForm(Screen screen) : this()
         {
             this.IsPreviewMode = false;
-            this.Bounds = Bounds; // Boundsに代入するとSizeも変わる
+            this.Bounds = screen.Bounds; // Boundsに代入するとSizeも変わる
+            this.CapturedScreenImage = GetScreenCaptureImage(screen);
         }
 
         // このコンストラクタは、スクリーンセーバーの選択ダイアログボックスの小窓で使用される
@@ -52,13 +54,15 @@ namespace KamopisScreensaver
             this.Location = Point.Empty;
 
             // 予めプレビューウィンドウに合わせて縮小しておく
-            this.CapturedScreenImage = CapturedScreenImage.Resized(this.ClientSize);
+            this.CapturedScreenImage = GetScreenCaptureImage(Screen.PrimaryScreen).Resized(this.ClientSize);
         }
         #endregion
 
         private void ScreenForm_Load(object sender, EventArgs e)
         {
             KamopisInitalize(Math.Min(this.ClientSize.Width, this.ClientSize.Height) / 5, KAMOPIS_NUM);
+
+            Debug.Assert(this.CapturedScreenImage != null);
 
             this.timerUpdate.Interval = FRAME_RATE;
             this.timerUpdate.Start();
@@ -86,18 +90,18 @@ namespace KamopisScreensaver
             }
         }
 
-        private static Image GetScreenCaptureImage()
+        private static Image GetScreenCaptureImage(Screen screen)
         {
-            var bmp = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
+            var bmp = new Bitmap(screen.Bounds.Width, screen.Bounds.Height);
             using (Graphics g = Graphics.FromImage(bmp))
             {
                 // 画面全体をコピーする
-                g.CopyFromScreen(Point.Empty, Point.Empty, bmp.Size);
+                g.CopyFromScreen(screen.Bounds.Location, Point.Empty, bmp.Size);
             }
             return bmp;
         }
 
-        private readonly Image CapturedScreenImage = GetScreenCaptureImage();
+        private readonly Image CapturedScreenImage;
 
         private const int KAMOPIS_NUM = 20;
         private const double KAMOPIS_SIZE_RANGE = 0.5;
