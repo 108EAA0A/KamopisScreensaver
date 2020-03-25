@@ -32,6 +32,9 @@ namespace KamopisScreensaver
         [DllImport("user32.dll")]
         public static extern bool GetClientRect(IntPtr hWnd, out RECT lpRect);
 
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool SetProcessDPIAware();
+
         /// <summary>
         /// GetWindowLongPtr/SetWindowLongPtr で何の情報を取得/設定するのかを指定します
         /// DWLP_ は hWnd パラメータがダイアログボックスのハンドルである場合のみ使用可能

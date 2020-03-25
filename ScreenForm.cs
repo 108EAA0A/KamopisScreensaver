@@ -92,6 +92,8 @@ namespace KamopisScreensaver
 
         private static Image GetScreenCaptureImage(Screen screen)
         {
+            PInvoke.SetProcessDPIAware();
+
             var bmp = new Bitmap(screen.Bounds.Width, screen.Bounds.Height);
             using (Graphics g = Graphics.FromImage(bmp))
             {
