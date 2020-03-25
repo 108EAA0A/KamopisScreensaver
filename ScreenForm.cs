@@ -60,8 +60,7 @@ namespace KamopisScreensaver
         {
             KamopisInitalize(Math.Min(this.ClientSize.Width, this.ClientSize.Height) / 5, KAMOPIS_NUM);
 
-            // TODO: 60FPS固定なので可変にする
-            this.timerUpdate.Interval = 33;
+            this.timerUpdate.Interval = FRAME_RATE;
             this.timerUpdate.Start();
 
             Cursor.Hide();
@@ -103,6 +102,9 @@ namespace KamopisScreensaver
         private const int KAMOPIS_NUM = 20;
         private const double KAMOPIS_SIZE_RANGE = 0.5;
         private readonly List<Kamopis> Kamopises = new List<Kamopis>();
+
+        // TODO: 60FPS固定なので可変にする
+        private const int FRAME_RATE = 1000 / 60;
 
         [SuppressMessage("Style", "IDE1006:命名スタイル", Justification = "<保留中>")]
         private void timerUpdate_Tick(object sender, EventArgs e)
